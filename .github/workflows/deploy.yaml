@@ -16,7 +16,12 @@ jobs:
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date '+%Y%m%d%H%M')"
+      - name: Add tag to commit
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ steps.date.outputs.date }}
       - uses: ncipollo/release-action@v1
         with:
           commit: ${{ github.event.inputs.commitSha }}
-          tag: ${{ github.event.inputs.commitSha }}
