@@ -19,4 +19,4 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           commit: ${{ github.event.inputs.commitSha }}
-          tag: ${{ steps.date.outputs.date }}
+          tag: ${{ github.event.inputs.commitSha }}
