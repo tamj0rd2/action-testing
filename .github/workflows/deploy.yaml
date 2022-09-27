@@ -1,0 +1,22 @@
+name: Create Release (to deploy)
+on:
+  workflow_dispatch:
+    inputs:
+      commitSha:
+        type: string
+        description: The commit SHA to deploy. Ensure your provide a commit that has successfully run the CI pipeline.
+        required: true
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date '+%Y%m%d%H%M')"
+      - uses: ncipollo/release-action@v1
+        with:
+          commit: ${{ github.event.inputs.commitSha }}
+          tag: ${{ steps.date.outputs.date }}
