@@ -19,11 +19,19 @@ jobs:
       - name: Get long commit ref
         id: commit
         run: echo "::set-output name=longSHA::$(git rev-parse ${{ github.event.inputs.commitSha }})"
-      - name: Add tag to commit
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          custom_tag: tags/${{ github.event.inputs.commitSha }}
-          commit_sha: ${{ github.commit.outputs.longSHA }}
-          tag_prefix: ''
+#      - name: Add tag to commit
+#        id: tag_version
+#        uses: mathieudutour/github-tag-action@v6.0
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          custom_tag: tags/${{ github.event.inputs.commitSha }}
+#          commit_sha: ${{ github.commit.outputs.longSHA }}
+#          tag_prefix: ''
+      - name: Do release
+        run: |
+          curl \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            $GITHUB_API_URL/repos/$GITHUB_REPOSITORY/releases \
+            -d '{"tag_name":"tags/${{ github.event.inputs.commitSha }}","target_commitish":"${{ github.commit.outputs.longSHA }}","name":"hello","body":"goodbye","draft":false,"prerelease":false,"generate_release_notes":false}'
