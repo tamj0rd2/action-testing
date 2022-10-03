@@ -20,7 +20,7 @@ jobs:
         id: commit
         run: |
           echo "::set-output name=longSHA::$(git rev-parse ${{ github.event.inputs.commitSha }})"
-          echo "::set-output name=shortSHA::$(git rev-parse ${{ github.event.inputs.commitSha }} --short)"
+          echo "::set-output name=shortSHA::$(git rev-parse --short ${{ github.event.inputs.commitSha }})"
       - name: Do release
         run: |
           curl \
