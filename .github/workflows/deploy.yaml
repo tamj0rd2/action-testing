@@ -18,15 +18,9 @@ jobs:
         run: echo "::set-output name=date::$(date '+%Y%m%d%H%M')"
       - name: Get long commit ref
         id: commit
-        run: echo "::set-output name=longSHA::$(git rev-parse ${{ github.event.inputs.commitSha }})"
-#      - name: Add tag to commit
-#        id: tag_version
-#        uses: mathieudutour/github-tag-action@v6.0
-#        with:
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
-#          custom_tag: tags/${{ github.event.inputs.commitSha }}
-#          commit_sha: ${{ github.commit.outputs.longSHA }}
-#          tag_prefix: ''
+        run: |
+          echo "::set-output name=longSHA::$(git rev-parse ${{ github.event.inputs.commitSha }})"
+          echo "::set-output name=shortSHA::$(git rev-parse ${{ github.event.inputs.commitSha }} --short)"
       - name: Do release
         run: |
           curl \
@@ -34,5 +28,5 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOOOKEN }}" \
             $GITHUB_API_URL/repos/$GITHUB_REPOSITORY/releases \
-            -d '{"tag_name":"tags/${{ github.event.inputs.commitSha }}","target_commitish":"${{ github.commit.outputs.longSHA }}","name":"${{ github.event.inputs.commitSha }}","body":"automated :)","draft":false,"prerelease":false,"generate_release_notes":false}' \
+            -d '{"tag_name":"tags/${{ github.commit.outputs.shortSHA }}","target_commitish":"${{ github.commit.outputs.longSHA }}","name":"${{ github.commit.outputs.shortSHA }}","body":"automated :)","draft":false,"prerelease":false,"generate_release_notes":false}' \
             --fail
