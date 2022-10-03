@@ -32,6 +32,7 @@ jobs:
           curl \
             -X POST \
             -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOOOKEN }}" \
             $GITHUB_API_URL/repos/$GITHUB_REPOSITORY/releases \
-            -d '{"tag_name":"tags/${{ github.event.inputs.commitSha }}","target_commitish":"${{ github.commit.outputs.longSHA }}","name":"${{ github.event.inputs.commitSha }}","body":"automated :)","draft":false,"prerelease":false,"generate_release_notes":false}'
+            -d '{"tag_name":"tags/${{ github.event.inputs.commitSha }}","target_commitish":"${{ github.commit.outputs.longSHA }}","name":"${{ github.event.inputs.commitSha }}","body":"automated :)","draft":false,"prerelease":false,"generate_release_notes":false}' \
+            --fail
