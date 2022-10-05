@@ -20,6 +20,13 @@ jobs:
         id: commit
         run: |
           echo "::set-output name=longSHA::$(git rev-parse ${{ github.event.inputs.commitSha }})"
+      - name: Check pipeline statuses
+        uses: tamj0rd2/pipeline-status-action@v1.2.0
+        with:
+          checkNames: myCheckName
+          slackWebhookURL: ${{ secrets.SLACK_URL }}
+          sha: ${{ github.event.inputs.commitSha }}
+          timeoutMinutes: "1"
       - name: Do release
         run: |
           curl \
