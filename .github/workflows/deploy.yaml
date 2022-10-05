@@ -25,7 +25,7 @@ jobs:
         uses: tamj0rd2/pipeline-status-action@v1.2.0
         with:
           checkNames: myCheckName
-          slackWebhookURL: ${{ secrets.SLACK_URL }}
+          slackWebhookURL: abc123
           sha: ${{ github.commit.outputs.shortSHA }}
           timeoutMinutes: "1"
       - name: Do release
