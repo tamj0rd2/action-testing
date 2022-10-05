@@ -20,12 +20,13 @@ jobs:
         id: commit
         run: |
           echo "::set-output name=longSHA::$(git rev-parse ${{ github.event.inputs.commitSha }})"
+          echo "::set-output name=shortSHA::$(git rev-parse --short ${{ github.event.inputs.commitSha }})"
       - name: Check pipeline statuses
         uses: tamj0rd2/pipeline-status-action@v1.2.0
         with:
           checkNames: myCheckName
           slackWebhookURL: ${{ secrets.SLACK_URL }}
-          sha: ${{ github.event.inputs.commitSha }}
+          sha: ${{ github.event.inputs.shortSHA }}
           timeoutMinutes: "1"
       - name: Do release
         run: |
@@ -34,5 +35,5 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             $GITHUB_API_URL/repos/$GITHUB_REPOSITORY/releases \
-            -d '{"tag_name":"${{ github.event.inputs.commitSha }}","target_commitish":"${{ github.commit.outputs.longSHA }}","name":"${{ github.event.inputs.commitSha }}","body":"automated :)","draft":false,"prerelease":false,"generate_release_notes":false}' \
+            -d '{"tag_name":"${{ github.event.inputs.shortSHA }}","target_commitish":"${{ github.commit.outputs.longSHA }}","name":"${{ github.event.inputs.shortSHA }}","body":"automated :)","draft":false,"prerelease":false,"generate_release_notes":false}' \
             --fail
