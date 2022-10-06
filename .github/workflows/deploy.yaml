@@ -23,8 +23,8 @@ jobs:
           echo ::set-output name=shortSHA::$(git rev-parse --short ${{ github.event.inputs.commitSha }})
       - name: Log commit refs
         run: |
-          echo ${{ github.commit.outputs.longSHA }}
-          echo ${{ github.commit.outputs.shortSHA }}
+          echo ${{ steps.commit.outputs.longSHA }}
+          echo ${{ steps.commit.outputs.shortSHA }}
           echo "got input ${{ github.event.inputs.commitSha }}"
           echo "want long $(git rev-parse ${{ github.event.inputs.commitSha }})
           echo "want short $(git rev-parse --short ${{ github.event.inputs.commitSha }})
@@ -35,13 +35,13 @@ jobs:
           context: 'TestStatus'
           description: 'All good'
           state: 'success'
-          sha: ${{ github.commit.outputs.longSHA }}
+          sha: ${{ steps.commit.outputs.longSHA }}
       - name: Check pipeline statuses
         uses: tamj0rd2/pipeline-status-action@v1.2.0
         with:
           checkNames: TestStatus
           slackWebhookURL: abc123
-          sha: ${{ github.commit.outputs.shortSHA }}
+          sha: ${{ steps.commit.outputs.shortSHA }}
           timeoutMinutes: "1"
       - name: Do release
         run: |
@@ -50,5 +50,5 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             $GITHUB_API_URL/repos/$GITHUB_REPOSITORY/releases \
-            -d '{"tag_name":"${{ github.commit.outputs.shortSHA }}","target_commitish":"${{ github.commit.outputs.longSHA }}","name":"${{ github.commit.outputs.shortSHA }}","body":"automated :)","draft":false,"prerelease":false,"generate_release_notes":false}' \
+            -d '{"tag_name":"${{ steps.commit.outputs.shortSHA }}","target_commitish":"${{ steps.commit.outputs.longSHA }}","name":"${{ steps.commit.outputs.shortSHA }}","body":"automated :)","draft":false,"prerelease":false,"generate_release_notes":false}' \
             --fail
