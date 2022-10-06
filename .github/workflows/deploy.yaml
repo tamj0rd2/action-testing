@@ -25,6 +25,9 @@ jobs:
         run: |
           echo "${{ github.commit.outputs.longSHA }}"
           echo "${{ github.commit.outputs.shortSHA }}"
+          echo "got input ${{ github.event.inputs.commitSha }})"
+          echo "want long $(git rev-parse ${{ github.event.inputs.commitSha }})
+          echo "want short $(git rev-parse --short ${{ github.event.inputs.commitSha }})
       - name: Add status check # so the check statuses thing can be tested
         uses: Sibz/github-status-action@v1
         with:
