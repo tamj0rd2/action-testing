@@ -21,6 +21,10 @@ jobs:
         run: |
           echo "::set-output name=longSHA::$(git rev-parse ${{ github.event.inputs.commitSha }})"
           echo "::set-output name=shortSHA::$(git rev-parse --short ${{ github.event.inputs.commitSha }})"
+      - name: Log commit refs
+        run: |
+          echo "${{ github.commit.outputs.longSHA }}"
+          echo "${{ github.commit.outputs.shortSHA }}"
       - name: Add status check # so the check statuses thing can be tested
         uses: Sibz/github-status-action@v1
         with:
