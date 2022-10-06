@@ -23,15 +23,12 @@ jobs:
           echo ::set-output name=shortSHA::$(git rev-parse --short ${{ github.event.inputs.commitSha }})
       - name: Log commit refs
         run: |
-          echo ${{ steps.commit.outputs.longSHA }}
-          echo ${{ steps.commit.outputs.shortSHA }}
-          echo "got input ${{ github.event.inputs.commitSha }}"
-          echo "want long $(git rev-parse ${{ github.event.inputs.commitSha }})
-          echo "want short $(git rev-parse --short ${{ github.event.inputs.commitSha }})
+          echo "long sha: ${{ steps.commit.outputs.longSHA }}"
+          echo "short sha: ${{ steps.commit.outputs.shortSHA }}"
       - name: Add status check # so the check statuses thing can be tested
         uses: Sibz/github-status-action@v1
         with:
-          authToken: ${{secrets.GITHUB_TOKEN}}
+          authToken: ${{ github.token }}
           context: 'TestStatus'
           description: 'All good'
           state: 'success'
@@ -48,7 +45,7 @@ jobs:
           curl \
             -X POST \
             -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Authorization: Bearer ${{ github.token }}" \
             $GITHUB_API_URL/repos/$GITHUB_REPOSITORY/releases \
             -d '{"tag_name":"${{ steps.commit.outputs.shortSHA }}","target_commitish":"${{ steps.commit.outputs.longSHA }}","name":"${{ steps.commit.outputs.shortSHA }}","body":"automated :)","draft":false,"prerelease":false,"generate_release_notes":false}' \
             --fail
