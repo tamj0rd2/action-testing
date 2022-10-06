@@ -10,24 +10,11 @@ jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
-      actions: write
-      checks: write
       contents: write
-      deployments: write
-      id-token: write
-      issues: write
-      discussions: write
-      packages: write
-      pages: write
-      pull-requests: write
-      repository-projects: write
-      security-events: write
+      repository-projects: read
       statuses: write
     steps:
       - uses: actions/checkout@v2
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date '+%Y%m%d%H%M')"
       - name: Get commit ref
         id: commit
         run: |
