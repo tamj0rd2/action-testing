@@ -19,13 +19,13 @@ jobs:
       - name: Get commit ref
         id: commit
         run: |
-          echo "::set-output name=longSHA::$(git rev-parse ${{ github.event.inputs.commitSha }})"
-          echo "::set-output name=shortSHA::$(git rev-parse --short ${{ github.event.inputs.commitSha }})"
+          echo ::set-output name=longSHA::$(git rev-parse ${{ github.event.inputs.commitSha }})
+          echo ::set-output name=shortSHA::$(git rev-parse --short ${{ github.event.inputs.commitSha }})
       - name: Log commit refs
         run: |
-          echo "${{ github.commit.outputs.longSHA }}"
-          echo "${{ github.commit.outputs.shortSHA }}"
-          echo "got input ${{ github.event.inputs.commitSha }})"
+          echo ${{ github.commit.outputs.longSHA }}
+          echo ${{ github.commit.outputs.shortSHA }}
+          echo "got input ${{ github.event.inputs.commitSha }}"
           echo "want long $(git rev-parse ${{ github.event.inputs.commitSha }})
           echo "want short $(git rev-parse --short ${{ github.event.inputs.commitSha }})
       - name: Add status check # so the check statuses thing can be tested
